@@ -5,7 +5,7 @@
 
 class RGB {
 public:
-    float r, g, b;
+    int r, g, b;
 
     // Constructors
     RGB();
@@ -23,9 +23,6 @@ public:
 
     // Conversion to int tuple
     std::tuple<int, int, int> to_int_tuple() const;
-
-    // PPM output
-    void print_ppm(std::ostream& out) const;
 };
 
 #endif // RAYTRACINGCPP_SRC_UTILITIES_RGB_HPP
