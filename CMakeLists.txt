@@ -1,29 +1,28 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.20)
+project(RayTracingCpp)
 
-# Project name and language
-project(RayTracer VERSION 1.0 LANGUAGES CXX)
-
-# Set C++ standard
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Add subdirectory for GLM
-add_subdirectory(external/glm)
+# Enable warnings
+if (MSVC)
+    add_compile_options(/W4 /permissive-)
+else()
+    add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
 
-# Include directories
-include_directories(${PROJECT_SOURCE_DIR}/include)
-include_directories(${PROJECT_SOURCE_DIR}/external/glm)
-
-# Source files
-set(SOURCES
-    src/main.cpp
-    src/SceneObjects.cpp
-    src/RayTracing.cpp
+# Collect all source files from src
+file(GLOB_RECURSE SOURCES
+    src/*.cpp
 )
 
-# Create executable
+# Executable from main.cpp + all sources
 add_executable(RayTracer ${SOURCES})
 
-# Link GLM (header-only, so optional)
-target_link_libraries(RayTracer PUBLIC glm)
+# Add include directories for headers
+target_include_directories(RayTracer PRIVATE
+    src/Objects
+    src/RayTracing
+    src/Utilities
+)
