@@ -1,7 +1,12 @@
 #include "Renderable.hpp"
 
 // Constructor
-Renderable::Renderable(const RGB& color_, int specular_, const glm::vec3& axis_, float reflectivity_)
+Renderable::Renderable(
+    const RGB& color_ = RGB(255, 255, 255), 
+    int specular_ = 500, 
+    float reflectivity_ = 0.0f, 
+    const glm::vec3& axis_ = glm::vec3(0, 1, 0)
+)
     : color(color_), specular(specular_), reflectivity(reflectivity_), axis(glm::normalize(axis_)) {}
 
 // Getters

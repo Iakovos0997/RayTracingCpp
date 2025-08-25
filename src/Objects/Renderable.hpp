@@ -3,17 +3,19 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include "RGB.hpp"
+#include "Ray.hpp"
 
 class Renderable {
-    RGB color;
-    int specular;
-    float reflectivity; // 0 = non-reflective, 1 = perfect mirror
-    glm::vec3 axis; // Axis for rotation
+    protected:
+        RGB color;
+        int specular;
+        float reflectivity; // 0 = non-reflective, 1 = perfect mirror
+        glm::vec3 axis; // Axis for rotation
     
     public:
         // Constructor
         Renderable();
-        Renderable(const RGB& color_ = RGB(0, 0, 0), int specular_ = 500, const glm::vec3& axis_ = glm::vec3(0, 1, 0), float reflectivity = 0.0f);
+        Renderable(const RGB& color_, int specular_, float reflectivity, const glm::vec3& axis_);
 
         virtual ~Renderable() = default;
 
@@ -31,7 +33,7 @@ class Renderable {
 
         // Compute intersection with a ray: O + t*D
         // Returns a list of t values (min t first), or empty vector if no intersection
-        virtual std::vector<float> intersect(const glm::vec3& O, const glm::vec3& D) const = 0;
+        virtual std::vector<float> intersect(const Ray& ray) const = 0;
 
         // Compute surface normal at point P
         virtual glm::vec3 normal_at(const glm::vec3& P) const = 0;
