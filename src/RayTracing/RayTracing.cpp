@@ -13,7 +13,9 @@ namespace RayTracing {
     // Constants / configuration
     // -----------------------------------------------------------------------------
 
-    static const RGB BACKGROUND_COLOR       {255, 255, 255};    // White background
+    static constexpr float EPS                  {1e-4};
+    static const RGB BLACK                      {0.0f, 0.0f, 0.0f};
+    static const RGB BACKGROUND_COLOR           {255, 255, 255};    // White background
     static constexpr int MAX_RECURSION_DEPTH    {3};                // Max recursion for reflections
 
     // -----------------------------------------------------------------------------
@@ -69,17 +71,17 @@ namespace RayTracing {
      * @param depth   Current recursion depth (0 for primaries).
      * @return        RGB color for the ray.
      */
-    RGB trace_ray(const Ray& ray, float t_min, float t_max, const Scene& scene, int depth = 0) {
+    RGB trace_ray(const Ray& ray, float t_min, float t_max, const Scene& scene, const int depth) {
         if (depth > MAX_RECURSION_DEPTH) {
-            return BACKGROUND_COLOR;
+            return BLACK;
         }
 
         // Find the closest intersection
         float closest_t {INFINITY};
-        std::shared_ptr<Renderable> closest_object {nullptr};
+        std::shared_ptr<Objects::Renderable> closest_object {nullptr};
 
         for (const auto& object : scene.get_objects()) {
-            auto t_values = object->intersect(ray);
+            std::vector<float> t_values {object->intersect(ray)};
 
             if (t_values.empty()) continue;
 
@@ -98,22 +100,18 @@ namespace RayTracing {
 
         // ----- Shading basis vectors / point -----
         const vec3 P {ray.at(closest_t)};                  // intersection point
-        const vec3 N {closest_object->normal_at(P)};       // surface normal at P
+        const vec3 N {normalize(closest_object->normal_at(P))};       // surface normal at P
         const vec3 V {normalize(-ray.get_direction())};    // view vector (toward camera)
 
         // ----- Local shading (diffuse + specular) -----
-        float intensity {compute_lighting(P, N, scene.get_lights(), V, closest_object->get_specular())};
+        const float intensity {compute_lighting(P, N, scene.get_lights(), V, closest_object->get_specular())};
         RGB local_color {closest_object->get_color() * intensity};
 
-        // ----- Reflections (recursive) -----
-        if (float reflectivity = closest_object->get_reflectivity(); reflectivity > 0.0f) {
-            const vec3 R {normalize(reflect(ray.get_direction(), N))}; // reflection dir
-            const vec3 bias {N * 1e-4f};                                   // avoid acne
-
-            const Ray reflected_ray {P + bias, R};
-            const RGB reflected_color {trace_ray(reflected_ray, 1e-4f, INFINITY, scene, depth + 1)};
-
-            // Linear blend between local and reflected color
+        // ----- Reflections -----
+        if (float reflectivity {closest_object->get_reflectivity()}; reflectivity > 0) {
+            const vec3 R {normalize(reflect(ray.get_direction(), N))};
+            const Ray reflected_ray {P + R * EPS, R};
+            const RGB reflected_color {trace_ray(reflected_ray, EPS, t_max, scene, depth + 1)};
             local_color = local_color * (1.0f - reflectivity) + reflected_color * reflectivity;
         }
 
@@ -132,7 +130,7 @@ namespace RayTracing {
      * @param shininess Phong specular exponent (<= 0 disables specular).
      * @return          Total light intensity in [0, 1].
      */
-    float compute_lighting(const vec3& P, const vec3& N_in, const std::vector<std::shared_ptr<Light>>& lights, const vec3& V_in, const int shininess) {
+    float compute_lighting(const vec3& P, const vec3& N_in, const std::vector<std::shared_ptr<Objects::Light>>& lights, const vec3& V_in, const int shininess) {
 
         // Normalize inputs if needed
         const vec3 N {is_normalized(N_in) ? N_in : normalize(N_in)};
@@ -142,7 +140,7 @@ namespace RayTracing {
         for (const auto& light : lights) {
 
             // Ambient contribution
-            if (light->get_type() == Light::Type::Ambient) {
+            if (light->get_type() == Objects::Light::Type::Ambient) {
                 intensity += light->get_intensity();
                 continue;
             }
@@ -150,12 +148,12 @@ namespace RayTracing {
             // Direction from P toward the light
             vec3 L;
 
-            if (light->get_type() == Light::Type::Point) {
-                if (const auto pt {std::dynamic_pointer_cast<PointLight>(light)}) {
+            if (light->get_type() == Objects::Light::Type::Point) {
+                if (const auto pt {std::dynamic_pointer_cast<Objects::PointLight>(light)}) {
                     L = normalize(pt->get_position() - P);
                 }
             } else { // Directional
-                if (const auto dl {std::dynamic_pointer_cast<DirectionalLight>(light)}) {
+                if (const auto dl {std::dynamic_pointer_cast<Objects::DirectionalLight>(light)}) {
                     L = normalize(dl->get_direction());
                 }
             }
@@ -163,12 +161,12 @@ namespace RayTracing {
             // Diffuse: max(0, N·L)
             const float n_dot_l {dot(N, L)};
             if (n_dot_l > 0) {
-                intensity += light->get_intensity() * (n_dot_l / (length(N) * length(L)));
+                intensity += light->get_intensity() * n_dot_l;
             }
 
             // Specular (Phong): max(0, R·V)^s
-            if (shininess > 0) {
-                const vec3 R {2.0f * N * n_dot_l - L};
+            if (shininess != -1) {
+                const vec3 R {N * 2.0f * n_dot_l - L};
                 if (const float r_dot_v {dot(R, V)}; r_dot_v > 0.0f) {
                     intensity += light->get_intensity() * std::pow(r_dot_v, shininess);
                 }

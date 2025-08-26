@@ -32,7 +32,7 @@ class Ray {
      * @note This is typically used to compute intersection points once a valid t
      *       is found by solving an object’s intersection equation (e.g., sphere, plane).
      */
-    glm::vec3 at(float t) const { return origin + t * direction; }
+    glm::vec3 at(const float t) const { return origin + t * direction; }
 };
 
 #endif // RAYTRACINGCPP_SRC_UTILITIES_RAY_HPP

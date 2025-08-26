@@ -5,9 +5,9 @@
 // --- Constructors ---
 RGB::RGB() : r(0), g(0), b(0) {}
 
-RGB::RGB(float r_, float g_, float b_) : r(int(r_)), g(int(g_)), b(int(b_)) {}
+RGB::RGB(const float r_, const float g_, const float b_) : r(static_cast<int>(r_)), g(static_cast<int>(g_)), b(static_cast<int>(b_)) {}
 
-RGB::RGB(int r_, int g_, int b_) : r(r_), g(g_), b(b_) {
+RGB::RGB(const int r_, const int g_, const int b_) : r(r_), g(g_), b(b_) {
     clamp();
 }
 
@@ -20,7 +20,7 @@ void RGB::clamp() {
 
 // --- Operators ---
 RGB RGB::operator*(float scalar) const {
-    return RGB(r * scalar, g * scalar, b * scalar);
+    return {r * scalar, g * scalar, b * scalar};
 }
 
 RGB& RGB::operator*=(float scalar) {
@@ -30,7 +30,7 @@ RGB& RGB::operator*=(float scalar) {
 }
 
 RGB RGB::operator+(const RGB& other) const {
-    return RGB(r + other.r, g + other.g, b + other.b);
+    return {r + other.r, g + other.g, b + other.b};
 }
 
 RGB& RGB::operator+=(const RGB& other) {
