@@ -20,7 +20,9 @@ file(GLOB_RECURSE SOURCES
 # Executable from main.cpp + all sources
 add_executable(RayTracer ${SOURCES}
         src/Objects/Plane.cpp
-        src/Objects/Plane.h)
+        src/Objects/Plane.h
+        src/Objects/Cylinder.cpp
+        src/Objects/Cylinder.h)
 
 # Add include directories for headers
 target_include_directories(RayTracer PRIVATE

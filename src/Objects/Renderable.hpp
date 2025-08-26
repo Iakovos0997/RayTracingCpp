@@ -15,7 +15,7 @@ namespace Objects {
     
     public:
         // Constructor
-        Renderable(const RGB& color_, int specular_, float reflectivity_, const glm::vec3& axis_);
+        explicit Renderable(const RGB& color_ = RGB(0,0,0), int specular_=0, float reflectivity_=0.0f, const glm::vec3& axis_={0,1,0});
 
         virtual ~Renderable() = default;
 
