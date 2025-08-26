@@ -5,7 +5,8 @@
 #include "RGB.hpp"
 #include "Ray.hpp"
 
-class Renderable {
+namespace Objects {
+    class Renderable {
     protected:
         RGB color;
         int specular;
@@ -14,8 +15,7 @@ class Renderable {
     
     public:
         // Constructor
-        Renderable();
-        Renderable(const RGB& color_, int specular_, float reflectivity, const glm::vec3& axis_);
+        Renderable(const RGB& color_, int specular_, float reflectivity_, const glm::vec3& axis_);
 
         virtual ~Renderable() = default;
 
@@ -37,5 +37,6 @@ class Renderable {
 
         // Compute surface normal at point P
         virtual glm::vec3 normal_at(const glm::vec3& P) const = 0;
-};
+    };
+}
 #endif // RAYTRACINGCPP_SRC_OBJECTS_RENDERABLE_HPP
