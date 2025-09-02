@@ -9,6 +9,7 @@
 #include "Light.hpp"
 #include "Plane.h"
 #include "RayTracing.hpp"
+#include "Torus.hpp"
 
 void render_scene(const int width, const int height, const RayTracing::Scene& scene) {
     constexpr glm::vec3 origin(0, 0, 0);
@@ -37,29 +38,34 @@ int main() {
 
     // Create objects
     std::vector<std::shared_ptr<Objects::Renderable>> objects;
-    objects.emplace_back(std::make_shared<Objects::Sphere>(
-        RGB(255, 0, 0), 500, 0.1f, glm::vec3(0,-1,3), 1.0f
-    ));
-    objects.emplace_back(std::make_shared<Objects::Sphere>(
-        RGB(0, 0, 255), 500, 0.1f, glm::vec3(2,0,4), 1.0f
-    ));
-    objects.emplace_back(std::make_shared<Objects::Sphere>(
-        RGB(0, 255, 0), 10, 0.1f, glm::vec3(-2,0,4), 1.0f
-    ));
+    // objects.emplace_back(std::make_shared<Objects::Sphere>(
+    //     RGB(255, 0, 0), 500, 0.1f, glm::vec3(0,-1,3), 1.0f
+    // ));
+    // objects.emplace_back(std::make_shared<Objects::Sphere>(
+    //     RGB(0, 0, 255), 500, 0.1f, glm::vec3(2,0,4), 1.0f
+    // ));
+    // objects.emplace_back(std::make_shared<Objects::Sphere>(
+    //     RGB(0, 255, 0), 10, 0.1f, glm::vec3(-2,0,4), 1.0f
+    // ));
+    // objects.emplace_back(std::make_shared<Objects::Sphere>(
+    // RGB(180, 200, 100), 500, 0.0f, glm::vec3(0,0,11), 1.0f
+    // ));
+    //
+    // // Floor plane
+    // objects.emplace_back(std::make_shared<Objects::Plane>(
+    //     RGB(200,200,200), 100, 0, glm::vec3(0,1,0), glm::vec3(0,-2,0)
+    //     ));
+    //
+    // // Back Mirror plane
+    // objects.emplace_back(std::make_shared<Objects::Plane>(
+    // RGB(180,180,200), 500, 0.8f, glm::vec3(0,0,-1), glm::vec3(0,0,13)
+    // ));
+    //
+    // objects.emplace_back(std::make_shared<Objects::Cylinder>(
+    //     glm::vec3{-1,3,7}, 0.5f, 4, RGB{255, 0, 255}, 500, 0, glm::vec3{1, -1, 1}
+    //     ));
 
-    // Floor plane
-    objects.emplace_back(std::make_shared<Objects::Plane>(
-        RGB(200,200,200), 100, 0, glm::vec3(0,1,0), glm::vec3(0,-2,0)
-        ));
-
-    // Back Mirror plane
-    objects.emplace_back(std::make_shared<Objects::Plane>(
-    RGB(180,180,200), 500, 0.8f, glm::vec3(0,0,-1), glm::vec3(0,0,13)
-    ));
-
-    objects.emplace_back(std::make_shared<Objects::Cylinder>(
-        glm::vec3{-1,3,7}, 0.5f, 4, RGB{255, 0, 255}, 500, 0, glm::vec3{1, -1, 1}
-        ));
+    objects.emplace_back(std::make_shared<Objects::Torus>());
 
     // Create lights
     std::vector<std::shared_ptr<Objects::Light>> lights;

@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <fstream>
 
-
+#include <utility>
 namespace RayTracing {
 
     using namespace glm;
@@ -53,6 +53,19 @@ namespace RayTracing {
         return std::fabs(length(v) - 1.0f) <= epsilon;
     }
 
+    inline void closest_interaction(const Ray& ray, const float& t_min, const float& t_max, const Scene& scene, float& closest_t, std::shared_ptr<Objects::Renderable>& closest_object) {
+            closest_t = INFINITY;
+            closest_object = nullptr;
+
+        for (const auto& object : scene.get_objects()) {
+            for (const std::vector<float> all_ts {object->intersect(ray)}; const auto& t : all_ts) {
+                if (t > t_min && t < t_max && t < closest_t) {
+                    closest_t = t;
+                    closest_object = object;
+                }
+            }
+        }
+    }
     // -----------------------------------------------------------------------------
     // Ray tracing core
     // -----------------------------------------------------------------------------
@@ -72,26 +85,16 @@ namespace RayTracing {
      * @return        RGB color for the ray.
      */
     RGB trace_ray(const Ray& ray, float t_min, float t_max, const Scene& scene, const int depth) {
+        typedef std::shared_ptr<Objects::Renderable> ObjectPtr;
         if (depth > MAX_RECURSION_DEPTH) {
             return BLACK;
         }
 
         // Find the closest intersection
         float closest_t {INFINITY};
-        std::shared_ptr<Objects::Renderable> closest_object {nullptr};
+        ObjectPtr closest_object {nullptr};
 
-        for (const auto& object : scene.get_objects()) {
-            std::vector<float> t_values {object->intersect(ray)};
-
-            if (t_values.empty()) continue;
-
-            for (float t : t_values) {
-                if (t >= t_min && t <= t_max && t < closest_t) {
-                    closest_t = t;
-                    closest_object = object;
-                }
-            }
-        }
+        closest_interaction(ray, t_min, t_max, scene, closest_t, closest_object);
 
         // No hit: return background
         if (closest_object == nullptr) {
@@ -100,8 +103,8 @@ namespace RayTracing {
 
         // ----- Shading basis vectors / point -----
         const vec3 P {ray.at(closest_t)};                  // intersection point
-        const vec3 N {normalize(closest_object->normal_at(P))};       // surface normal at P
-        const vec3 V {normalize(-ray.get_direction())};    // view vector (toward camera)
+        const vec3 N {closest_object->normal_at(P)};       // surface normal at P
+        const vec3 V {-ray.get_direction()};               // view vector (toward camera)
 
         // ----- Local shading (diffuse + specular) -----
         const float intensity {compute_lighting(P, N, scene.get_lights(), V, closest_object->get_specular())};
