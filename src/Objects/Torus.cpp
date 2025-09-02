@@ -12,19 +12,6 @@ namespace Objects {
 
     using vec3 = glm::vec3;
 
-    void Torus::rebuild_cache() {
-        const glm::vec3 pick = (std::abs(axis.x) < 0.9f) ? glm::vec3(1,0,0) : glm::vec3(0,1,0);
-        u_ = glm::normalize(glm::cross(pick, axis));
-        v_ = glm::cross(axis, u_);
-        w_ = axis;
-        // If you want columns as u,v,w:
-        world_to_local_ = glm::mat3(u_, v_, w_);
-        R2_ = major_radius * major_radius;
-        r2_ = minor_radius * minor_radius;
-        fourR2_  = 4.0f * R2_;
-        eightR2_ = 8.0f * R2_;
-    }
-
     Torus::Torus()
         : Renderable(), center({0, 0, 10}), major_radius(2.0f), minor_radius(0.5f) {}
 
@@ -68,34 +55,39 @@ namespace Objects {
         v = glm::cross(w, u);                    // already unit if u,w are unit & ⟂
     }
 
-    std::vector<float> Torus::intersect(const Ray& ray) const {
-        using glm::dot;
+std::vector<float> Torus::intersect(const Ray& ray) const {
+        // Build Orthonormal basis
+        glm::vec3 u, v, w;
+        make_orthonormal_basis(axis, u, v, w);
 
-        // Transform into local coordinates (assumes Ray::direction is normalized)
-        const glm::vec3 O_rel   = ray.get_origin() - center;
-        const glm::vec3 O_local = world_to_local_ * O_rel;
-        const glm::vec3 D_local = world_to_local_ * ray.get_direction();
+        // Transform Ray into local torus coordinates
+        auto O_rel {ray.get_origin() - center};
+        auto O_local {vec3(glm::dot(O_rel, u), glm::dot(O_rel, v), glm::dot(O_rel, w))};
+        auto D_local {vec3(glm::dot(ray.get_direction(), u), glm::dot(ray.get_direction(), v), glm::dot(ray.get_direction(), w))};
 
-        const float ox = O_local.x, oy = O_local.y, oz = O_local.z;
-        const float dx = D_local.x, dy = D_local.y, dz = D_local.z;
+        // Quartic Coefficients
+        auto dx {D_local.x};
+        auto dy {D_local.y};
+        auto dz {D_local.z};
 
-        // Precompute ray/point scalars
-        // sum_d_sq = 1 if D is normalized
-        const float e = ox*ox + oy*oy + oz*oz - R2_ - r2_;
-        const float f = ox*dx + oy*dy + oz*dz;
+        auto ox {O_local.x};
+        auto oy {O_local.y};
+        auto oz {O_local.z};
 
-        // Quartic coefficients (A=1, B=4f when |D|=1)
-        const float A  = 1.0f;
-        const float B  = 4.0f * f;
-        const float C  = 2.0f * e + 4.0f * f*f + fourR2_ * dz*dz;
-        const float D  = 4.0f * f * e + eightR2_ * oz * dz;
-        const float E  = e*e - fourR2_ * (r2_ - oz*oz);
+        auto sum_d_sq {dx*dx + dy*dy + dz*dz};
+        auto e {ox*ox + oy*oy + oz*oz - major_radius*major_radius - minor_radius*minor_radius};
+        auto f {ox*dx + oy*dy + oz*dz};
 
-        auto roots = solve_quartic(A, B, C, D, E);
+        auto A {sum_d_sq * sum_d_sq};
+        auto B {4.0f * f * sum_d_sq};
+        auto C {2.0f * sum_d_sq * e + 4.0f * f * f + 4.0f * major_radius*major_radius * dz*dz};
+        auto D {4.0f  * f * e + 8 * major_radius * major_radius * oz * dz};
+        auto E {e*e - 4.0f * major_radius * major_radius * (minor_radius*minor_radius - oz*oz)};
+
+        auto roots {solve_quartic(A, B, C, D, E)};
         std::ranges::sort(roots);
         return roots;
-    }
-
+}
 
     glm::vec3 Torus::normal_at(const glm::vec3& P) const {
         const glm::vec3 P_rel {P - center};
