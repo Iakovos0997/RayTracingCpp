@@ -1,5 +1,7 @@
-file(GLOB UTIL_SRC "*.cpp")
+file(GLOB SOURCES CONFIGURE_DEPENDS "*.cpp")
+file(GLOB HEADERS CONFIGURE_DEPENDS "*.hpp")
+add_library(UtilitiesLib ${SOURCES} ${HEADERS})
 
-add_library(UtilitiesLib STATIC ${UTIL_SRC})
+target_include_directories(UtilitiesLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
-target_include_directories(UtilitiesLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(UtilitiesLib PUBLIC Eigen3::Eigen)

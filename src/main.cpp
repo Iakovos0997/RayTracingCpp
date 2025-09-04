@@ -3,13 +3,13 @@
 #include <fstream>
 #include <memory>
 
-#include "Cylinder.h"
-#include "RGB.hpp"
-#include "Sphere.hpp"
-#include "Light.hpp"
-#include "Plane.h"
-#include "RayTracing.hpp"
-#include "Torus.hpp"
+#include "Objects/Cylinder.hpp"
+#include "Utilities/RGB.hpp"
+#include "Objects/Sphere.hpp"
+#include "Objects/Light.hpp"
+#include "Objects/Plane.hpp"
+#include "RayTracing/RayTracing.hpp"
+#include "Objects/Torus.hpp"
 
 void render_scene(const int width, const int height, const RayTracing::Scene& scene) {
     constexpr glm::vec3 origin(0, 0, 0);

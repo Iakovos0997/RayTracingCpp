@@ -24,7 +24,7 @@ namespace Objects {
 
     std::vector<float> Torus::solve_quartic(const float A, const float B, const float C, const float D, const float E) {
         using namespace Eigen;
-        Matrix4d M = Matrix4d::Zero();
+        Matrix4d M {Matrix4d::Zero()};
 
         // Fill compani on matrix (normalized by A)
         M(0, 3) = -E / A;
@@ -32,14 +32,13 @@ namespace Objects {
         M(2, 1) = 1.0;  M(2, 3) = -C / A;
         M(3, 2) = 1.0;  M(3, 3) = -B / A;
 
-        EigenSolver<Matrix4d> solver(M, false);
+        const EigenSolver<Matrix4d> solver(M, false);
         std::vector<float> roots;
         roots.reserve(4);
 
-        constexpr double EPS = 1e-6;  // tolerance for "zero" imaginary part
         for (int i = 0; i < 4; ++i) {
             const auto val = solver.eigenvalues()[i];
-            if (std::abs(val.imag()) < EPS) {
+            if (constexpr double EPS = 1e-6; std::abs(val.imag()) < EPS) {
                 roots.emplace_back(static_cast<float>(val.real()));
             }
         }

@@ -2,9 +2,9 @@
 #define RAYTRACINGCPP_SRC_OBJECTS_SPHERE_HPP
 #include <glm/glm.hpp>
 #include <vector>
-#include "RGB.hpp"
+#include "Utilities/RGB.hpp"
 #include "Renderable.hpp"
-#include "Ray.hpp"
+#include "Utilities/Ray.hpp"
 
 namespace Objects {
     class Sphere : public Renderable {

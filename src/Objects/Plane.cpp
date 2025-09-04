@@ -2,7 +2,7 @@
 // Created by jimmy on 8/25/25.
 //
 
-#include "Plane.h"
+#include "Plane.hpp"
 
 namespace Objects {
 

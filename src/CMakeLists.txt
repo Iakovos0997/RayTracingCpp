@@ -1,14 +1,15 @@
-# Source directories
+# src/CMakeLists.txt
+
 add_subdirectory(Objects)
 add_subdirectory(RayTracing)
 add_subdirectory(Utilities)
 
-# Main executable
+# Main executable (entry point)
 add_executable(RayTracer main.cpp)
 
-# Link all the libraries together
+# Link the internal libraries to the app
 target_link_libraries(RayTracer
-    PRIVATE
+        PRIVATE
         ObjectsLib
         RayTracingLib
         UtilitiesLib

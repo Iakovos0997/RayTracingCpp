@@ -1,4 +1,4 @@
-#include "RGB.hpp"
+#include "Utilities/RGB.hpp"
 #include <algorithm>
 #include <cmath>
 

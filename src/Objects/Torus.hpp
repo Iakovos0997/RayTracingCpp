@@ -14,6 +14,10 @@ namespace Objects {
     class Torus : public Renderable {
         glm::vec3 center;
         float major_radius, minor_radius;
+        glm::vec3 axis_unit_;
+        glm::vec3 u_, v_, w_;     // basis
+        glm::mat3 world_to_local_; // rows or columns consistent with your use
+        float R2_, r2_, fourR2_, eightR2_;
 
     public:
         Torus();

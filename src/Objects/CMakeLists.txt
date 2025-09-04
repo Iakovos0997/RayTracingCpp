@@ -1,8 +1,10 @@
-# Collect all .cpp files
-file(GLOB OBJECTS_SRC "*.cpp")
+# src/Objects/CMakeLists.txt
 
-# Create a library for objects
-add_library(ObjectsLib STATIC ${OBJECTS_SRC})
+file(GLOB SOURCES CONFIGURE_DEPENDS "*.cpp")
+file(GLOB HEADERS CONFIGURE_DEPENDS "*.hpp")
 
-# Include headers
-target_include_directories(ObjectsLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+add_library(ObjectsLib ${SOURCES} ${HEADERS})
+
+target_include_directories(ObjectsLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
+
+target_link_libraries(ObjectsLib PUBLIC UtilitiesLib RayTracingLib)

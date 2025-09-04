@@ -3,10 +3,10 @@
 #include <vector>
 #include <memory>
 #include <algorithm>
-#include "RGB.hpp"
-#include "Ray.hpp"
-#include "Renderable.hpp"
-#include "Light.hpp"
+#include "Utilities/RGB.hpp"
+#include "Utilities/Ray.hpp"
+#include "Objects/Renderable.hpp"
+#include "Objects/Light.hpp"
 #include <glm/glm.hpp>
 
 namespace RayTracing {

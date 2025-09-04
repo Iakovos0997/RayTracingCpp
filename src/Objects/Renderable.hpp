@@ -2,8 +2,8 @@
 #define RAYTRACINGCPP_SRC_OBJECTS_RENDERABLE_HPP
 #include <glm/glm.hpp>
 #include <vector>
-#include "RGB.hpp"
-#include "Ray.hpp"
+#include "Utilities/RGB.hpp"
+#include "Utilities/Ray.hpp"
 
 namespace Objects {
     class Renderable {
