@@ -3,47 +3,41 @@
 //
 
 #include "Torus.hpp"
-
+#include "Utilities/Math.hpp"
 #include <algorithm>
 #include <Eigen/Dense>
 #include <complex>
-#include <Eigen/Eigenvalues>
+#include <vector>
+#include <cmath>
+
 namespace Objects {
 
     using vec3 = glm::vec3;
 
     Torus::Torus()
-        : Renderable(), center({0, 0, 10}), major_radius(2.0f), minor_radius(0.5f) {}
+        : IRenderable(), center({0, 0, 10}), major_radius(2.0f), minor_radius(0.5f) {}
 
     Torus::Torus(const glm::vec3 &center_, const float &major_radius_, const float &minor_radius_)
-        : Renderable(), center(center_), major_radius(major_radius_), minor_radius(minor_radius_) {}
+        : IRenderable(), center(center_), major_radius(major_radius_), minor_radius(minor_radius_) {}
 
     Torus::Torus(const glm::vec3 &center_, const float &major_radius_, const float &minor_radius_, const RGB &color_, const int &specular_, const float &reflectivity_, const glm::vec3 &axis_)
-            : Renderable(color_, specular_, reflectivity_, axis_), center(center_), major_radius(major_radius_), minor_radius(minor_radius_) {
+            : IRenderable(color_, specular_, reflectivity_, axis_), center(center_), major_radius(major_radius_), minor_radius(minor_radius_) {
     }
 
-    std::vector<float> Torus::solve_quartic(const float A, const float B, const float C, const float D, const float E) {
-        using namespace Eigen;
-        Matrix4d M {Matrix4d::Zero()};
+    std::vector<float> Torus::solve_quartic(const float /*A*/, const float B, const float C, const float D, const float E) {
 
-        // Fill compani on matrix (normalized by A)
-        M(0, 3) = -E / A;
-        M(1, 0) = 1.0;  M(1, 3) = -D / A;
-        M(2, 1) = 1.0;  M(2, 3) = -C / A;
-        M(3, 2) = 1.0;  M(3, 3) = -B / A;
+        const auto b {static_cast<double>(B)};
+        const auto c {static_cast<double>(C)};
+        const auto d {static_cast<double>(D)};
+        const auto e {static_cast<double>(E)};
 
-        const EigenSolver<Matrix4d> solver(M, false);
-        std::vector<float> roots;
-        roots.reserve(4);
+        std::vector<double> rD;
+        Math::solve_quartic_monic(b,c,d,e,rD);
 
-        for (int i = 0; i < 4; ++i) {
-            const auto val = solver.eigenvalues()[i];
-            if (constexpr double EPS = 1e-6; std::abs(val.imag()) < EPS) {
-                roots.emplace_back(static_cast<float>(val.real()));
-            }
-        }
-
-        return roots;
+        std::vector<float> out;
+        out.reserve(rD.size());
+        for (const double& t : rD) out.push_back(static_cast<float>(t));
+        return out;
     }
 
     // Build a right-handed orthonormal basis (u, v, w), where w = normalized axis.

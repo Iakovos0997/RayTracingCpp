@@ -5,24 +5,24 @@
 #include <algorithm>
 #include "Utilities/RGB.hpp"
 #include "Utilities/Ray.hpp"
-#include "Objects/Renderable.hpp"
+#include "Objects/IRenderable.hpp"
 #include "Objects/Light.hpp"
 #include <glm/glm.hpp>
 
 namespace RayTracing {
 
     class Scene {
-        std::vector<std::shared_ptr<Objects::Renderable>> objects;
+        std::vector<std::shared_ptr<Objects::IRenderable>> objects;
         std::vector<std::shared_ptr<Objects::Light>> lights;
     public:
         // Constructors
         Scene(
-            const std::vector<std::shared_ptr<Objects::Renderable>>& objects_,
+            const std::vector<std::shared_ptr<Objects::IRenderable>>& objects_,
             const std::vector<std::shared_ptr<Objects::Light>>& lights_
         ) : objects(objects_), lights(lights_) {}
 
         // Getters
-        const std::vector<std::shared_ptr<Objects::Renderable>>& get_objects() const { return objects; }
+        const std::vector<std::shared_ptr<Objects::IRenderable>>& get_objects() const { return objects; }
         const std::vector<std::shared_ptr<Objects::Light>>& get_lights() const { return lights; }
     };
 

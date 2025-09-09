@@ -6,7 +6,7 @@
 #include "Utilities/Ray.hpp"
 
 namespace Objects {
-    class Renderable {
+    class IRenderable {
     protected:
         RGB color;
         int specular;
@@ -15,9 +15,9 @@ namespace Objects {
     
     public:
         // Constructor
-        explicit Renderable(const RGB& color_ = RGB(255,0,0), int specular_=500, float reflectivity_=0.0f, const glm::vec3& axis_={1,1,1});
+        explicit IRenderable(const RGB& color_ = RGB(255,0,0), int specular_=500, float reflectivity_=0.0f, const glm::vec3& axis_={1,1,1});
 
-        virtual ~Renderable() = default;
+        virtual ~IRenderable() = default;
 
         // Getters
         RGB get_color() const;

@@ -53,7 +53,7 @@ namespace RayTracing {
         return std::fabs(length(v) - 1.0f) <= epsilon;
     }
 
-    inline void closest_interaction(const Ray& ray, const float& t_min, const float& t_max, const Scene& scene, float& closest_t, std::shared_ptr<Objects::Renderable>& closest_object) {
+    inline void closest_interaction(const Ray& ray, const float& t_min, const float& t_max, const Scene& scene, float& closest_t, std::shared_ptr<Objects::IRenderable>& closest_object) {
             closest_t = INFINITY;
             closest_object = nullptr;
 
@@ -85,7 +85,7 @@ namespace RayTracing {
      * @return        RGB color for the ray.
      */
     RGB trace_ray(const Ray& ray, float t_min, float t_max, const Scene& scene, const int depth) {
-        typedef std::shared_ptr<Objects::Renderable> ObjectPtr;
+        typedef std::shared_ptr<Objects::IRenderable> ObjectPtr;
         if (depth > MAX_RECURSION_DEPTH) {
             return BLACK;
         }

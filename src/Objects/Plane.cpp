@@ -7,10 +7,10 @@
 namespace Objects {
 
     Plane::Plane()
-        : Renderable(RGB(0, 0, 255), 0, 0, glm::normalize(glm::vec3(0, 1, 0))), point(glm::vec3(0, 0, 1)), normal(axis) {}
+        : IRenderable(RGB(0, 0, 255), 0, 0, glm::normalize(glm::vec3(0, 1, 0))), point(glm::vec3(0, 0, 1)), normal(axis) {}
 
     Plane::Plane(const RGB& color_, const int specular_, const float reflectivity_, const glm::vec3& axis_, const glm::vec3& point_)
-        : Renderable(color_, specular_, reflectivity_, axis_), point(point_), normal(glm::normalize(axis_)) {}
+        : IRenderable(color_, specular_, reflectivity_, axis_), point(point_), normal(glm::normalize(axis_)) {}
 
     glm::vec3 Plane::get_point() const {
         return point;

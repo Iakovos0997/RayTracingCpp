@@ -4,10 +4,10 @@
 
 #ifndef RAYTRACINGCPP_CYLINDER_H
 #define RAYTRACINGCPP_CYLINDER_H
-#include "Renderable.hpp"
+#include "IRenderable.hpp"
 
 namespace Objects {
-    class Cylinder : public Renderable {
+    class Cylinder : public IRenderable {
         glm::vec3 base_center;
         float radius;
         float height;

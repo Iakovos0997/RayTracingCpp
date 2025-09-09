@@ -3,7 +3,8 @@
 file(GLOB SOURCES CONFIGURE_DEPENDS "*.cpp")
 file(GLOB HEADERS CONFIGURE_DEPENDS "*.hpp")
 
-add_library(ObjectsLib ${SOURCES} ${HEADERS})
+add_library(ObjectsLib ${SOURCES} ${HEADERS}
+        ../Utilities/Math.hpp)
 
 target_include_directories(ObjectsLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
 

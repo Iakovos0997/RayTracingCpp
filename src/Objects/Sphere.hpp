@@ -3,11 +3,11 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include "Utilities/RGB.hpp"
-#include "Renderable.hpp"
+#include "IRenderable.hpp"
 #include "Utilities/Ray.hpp"
 
 namespace Objects {
-    class Sphere : public Renderable {
+    class Sphere : public IRenderable {
         glm::vec3 center;
         float radius;
         const RGB &color_;

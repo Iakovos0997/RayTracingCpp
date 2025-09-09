@@ -7,10 +7,10 @@
 namespace Objects {
 
     Cylinder::Cylinder(const glm::vec3 &base_center_, const float radius_, const float height_)
-        : Renderable(), base_center(base_center_), radius(radius_), height(height_) {}
+        : IRenderable(), base_center(base_center_), radius(radius_), height(height_) {}
 
     Cylinder::Cylinder(const glm::vec3 &base_center_, const float radius_, const float height_, const RGB& color_, const int specular_, const float reflectivity_, const glm::vec3& axis_)
-        : Renderable(color_, specular_, reflectivity_, axis_), base_center(base_center_), radius(radius_), height(height_) {}
+        : IRenderable(color_, specular_, reflectivity_, axis_), base_center(base_center_), radius(radius_), height(height_) {}
 
     // Getters
     glm::vec3 Cylinder::get_base_center() const {

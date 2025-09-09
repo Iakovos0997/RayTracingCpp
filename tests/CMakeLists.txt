@@ -1,7 +1,8 @@
 # tests/CMakeLists.txt
 
 # Example test binary
-add_executable(TorusTests TorusTests.cpp)
+add_executable(TorusTests TorusTests.cpp
+        ../src/Utilities/Math.hpp)
 
 target_link_libraries(TorusTests
         PUBLIC

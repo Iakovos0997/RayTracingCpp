@@ -37,35 +37,48 @@ int main() {
     constexpr int height = 600;
 
     // Create objects
-    std::vector<std::shared_ptr<Objects::Renderable>> objects;
-    // objects.emplace_back(std::make_shared<Objects::Sphere>(
-    //     RGB(255, 0, 0), 500, 0.1f, glm::vec3(0,-1,3), 1.0f
-    // ));
-    // objects.emplace_back(std::make_shared<Objects::Sphere>(
-    //     RGB(0, 0, 255), 500, 0.1f, glm::vec3(2,0,4), 1.0f
-    // ));
-    // objects.emplace_back(std::make_shared<Objects::Sphere>(
-    //     RGB(0, 255, 0), 10, 0.1f, glm::vec3(-2,0,4), 1.0f
-    // ));
-    // objects.emplace_back(std::make_shared<Objects::Sphere>(
-    // RGB(180, 200, 100), 500, 0.0f, glm::vec3(0,0,11), 1.0f
-    // ));
-    //
-    // // Floor plane
-    // objects.emplace_back(std::make_shared<Objects::Plane>(
-    //     RGB(200,200,200), 100, 0, glm::vec3(0,1,0), glm::vec3(0,-2,0)
-    //     ));
-    //
-    // // Back Mirror plane
-    // objects.emplace_back(std::make_shared<Objects::Plane>(
-    // RGB(180,180,200), 500, 0.8f, glm::vec3(0,0,-1), glm::vec3(0,0,13)
-    // ));
-    //
-    // objects.emplace_back(std::make_shared<Objects::Cylinder>(
-    //     glm::vec3{-1,3,7}, 0.5f, 4, RGB{255, 0, 255}, 500, 0, glm::vec3{1, -1, 1}
-    //     ));
+    std::vector<std::shared_ptr<Objects::IRenderable>> objects;
+    objects.emplace_back(std::make_shared<Objects::Sphere>(
+        RGB(255, 0, 0), 500, 0.1f, glm::vec3(0,-1,3), 1.0f
+    ));
+    objects.emplace_back(std::make_shared<Objects::Sphere>(
+        RGB(0, 0, 255), 500, 0.1f, glm::vec3(2,0,4), 1.0f
+    ));
+    objects.emplace_back(std::make_shared<Objects::Sphere>(
+        RGB(0, 255, 0), 10, 0.1f, glm::vec3(-2,0,4), 1.0f
+    ));
+    objects.emplace_back(std::make_shared<Objects::Sphere>(
+    RGB(180, 200, 100), 500, 0.0f, glm::vec3(0,0,11), 1.0f
+    ));
 
-    objects.emplace_back(std::make_shared<Objects::Torus>());
+    // Floor plane
+    objects.emplace_back(std::make_shared<Objects::Plane>(
+        RGB(200,200,200), 100, 0, glm::vec3(0,1,0), glm::vec3(0,-2,0)
+        ));
+
+    // Back Mirror plane
+    objects.emplace_back(std::make_shared<Objects::Plane>(
+    RGB(180,180,200), 500, 0.8f, glm::vec3(0,0,-1), glm::vec3(0,0,13)
+    ));
+
+    objects.emplace_back(std::make_shared<Objects::Cylinder>(
+        glm::vec3{-1,3,7}, 0.5f, 4, RGB{255, 0, 255}, 500, 0, glm::vec3{1, -1, 1}
+        ));
+
+    objects.emplace_back(std::make_shared<Objects::Torus>(
+        glm::vec3(0, 2.5, 7), 1.5f, 0.5f, RGB(0, 255, 255), 300, 0, glm::vec3(1, -1, 1)
+    ));
+    // const glm::vec3 &center_, const float &major_radius_, const float &minor_radius_, const RGB &color_, const int &specular_, const float &reflectivity_, const glm::vec3 &axis_
+
+// # Floating torus
+//     Torus(
+//         center=Vector(0, 2.5, 7),
+//         major_radius=1.5,
+//         minor_radius=0.5,
+//         color=(0, 255, 255),
+//         specular=300,
+//         axis=Vector(1, -1, 1)
+//     )
 
     // Create lights
     std::vector<std::shared_ptr<Objects::Light>> lights;

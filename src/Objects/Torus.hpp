@@ -7,11 +7,11 @@
 #include <Eigen/Dense>
 #include <complex>
 #include <vector>
-#include "Renderable.hpp"
+#include "IRenderable.hpp"
 
 
 namespace Objects {
-    class Torus : public Renderable {
+    class Torus : public IRenderable {
         glm::vec3 center;
         float major_radius, minor_radius;
         glm::vec3 axis_unit_;

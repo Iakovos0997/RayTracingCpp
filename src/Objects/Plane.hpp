@@ -4,10 +4,10 @@
 
 #ifndef RAYTRACINGCPP_PLANE_H
 #define RAYTRACINGCPP_PLANE_H
-#include "Renderable.hpp"
+#include "IRenderable.hpp"
 
 namespace Objects {
-    class Plane : public Renderable {
+    class Plane : public IRenderable {
         glm::vec3 point;
         glm::vec3 normal;
 

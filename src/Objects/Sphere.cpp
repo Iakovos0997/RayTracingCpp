@@ -4,7 +4,7 @@ namespace Objects {
     // Constructors
     // ------------------------
     Sphere::Sphere(const RGB& color_, const int specular_, const float reflectivity_, const glm::vec3& center_, const float radius_)
-        : Renderable(color_, specular_, reflectivity_, glm::vec3(0, 1,0)), center(center_), radius(radius_), color_(color_) {}
+        : IRenderable(color_, specular_, reflectivity_, glm::vec3(0, 1,0)), center(center_), radius(radius_), color_(color_) {}
 
     // ------------------------
     // Getters
